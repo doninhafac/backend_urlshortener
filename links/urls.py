@@ -5,7 +5,7 @@ from .views import (
     shorten_url, 
     track_click, 
     link_stats,
-    list_user_links  # Certifique-se de importar aqui
+    list_user_links  
 )
 
 urlpatterns = [

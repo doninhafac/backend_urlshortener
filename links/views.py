@@ -7,12 +7,10 @@ from django.http import HttpResponseGone, HttpResponseNotFound, JsonResponse, Ht
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny, IsAuthenticated
-from .models import Categoria, ShortenedURL, Click
+from .models import Categoria, ShortenedURL, Click, ShortenedURLCategoria
 from registros.models import Usuario, Perfil
 from .models import ShortenedURL
 
-
-# Função para rastrear cliques
 def track_click(request, short_code):
     url = get_object_or_404(ShortenedURL, short_code=short_code)
 
@@ -25,14 +23,12 @@ def track_click(request, short_code):
 
     return redirect(url.original_url)
 
-# Função para encurtar URL
-# Função para encurtar URL
 @api_view(['POST'])
 @permission_classes([AllowAny])
 def shorten_url(request):
     original_url = request.data.get('url')
     user = request.user if request.user.is_authenticated else None
-    categories = request.data.get('categories', [])  # Lista de categorias fornecidas
+    categories = request.data.get('categories', [])
 
     if not original_url:
         return Response({'error': 'URL não fornecida'}, status=400)
@@ -51,17 +47,17 @@ def shorten_url(request):
     if existing_url:
         return Response({'shortened_url': f"http://localhost:8000/{existing_url.short_code}"}, status=200)
 
-    try:
-        short_url = ShortenedURL.objects.create(original_url=original_url, user=user)
-        if categories:
-            categories_objects = Categoria.objects.filter(id__in=categories)
-            short_url.categorias.set(categories_objects)
-        return Response({'shortened_url': f"http://localhost:8000/{short_url.short_code}"}, status=201)
-    except Exception as e:
-        return Response({'error': f'Ocorreu um erro: {str(e)}'}, status=500)
+    new_short_url = ShortenedURL.objects.create(original_url=original_url, user=user)
+
+    if categories:
+        for cat_name in categories:
+            category, created = Categoria.objects.get_or_create(nome=cat_name)
+            ShortenedURLCategoria.objects.create(url=new_short_url, categoria=category)
+
+    return Response({'shortened_url': f"http://localhost:8000/{new_short_url.short_code}"}, status=201)
 
 
-# Função para redirecionar para a URL original
+
 @api_view(['GET'])
 @permission_classes([AllowAny])
 def redirect_to_original(request, short_code):
@@ -109,8 +105,6 @@ def premium_edit_links(request):
     except Exception as e:
         return Response({'error': f'Ocorreu um erro: {str(e)}'}, status=500)
 
-# Função para obter estatísticas de um link
-# Função para obter estatísticas de um link
 def link_stats(request, short_code):
     if not request.user.is_authenticated:
         return HttpResponseForbidden("Você precisa estar autenticado para acessar esta funcionalidade.")
