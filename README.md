@@ -1,106 +1,103 @@
-# Projeto URL Shortener
+# Encurtador de URL
 
-Este projeto é um encurtador de URL desenvolvido em Django com PostgreSQL. Siga as instruções abaixo para configurar o ambiente e executar o projeto.
+Este projeto foi desenvolvido por **Daniel Reis** e **Andressa Lopes** como parte da disciplina de **Desenvolvimento Web**, ministrada pelo professor **Ciniro Nametala**. O objetivo do projeto é criar um encurtador de URL utilizando uma stack moderna, com Django no backend e PostgreSQL como banco de dados.
 
----
+## Pré-requisitos
 
-## 1️⃣ Pré-requisitos
+Antes de começar, certifique-se de que você tem os seguintes requisitos instalados em sua máquina:
 
-Antes de começar, certifique-se de ter os seguintes softwares instalados:
+-   **Anaconda Python**: Para gerenciar o ambiente Python.
+-   **VSCode**: Para edição de código.
+-   **PostgreSQL 16+**: Como banco de dados.
+-   **DBeaver**: Para gerenciar o banco de dados.
+-   **Git**: Para controle de versão.
 
-- [Anaconda Python](https://www.anaconda.com/products/distribution)
-- [VSCode](https://code.visualstudio.com/)
-- [PostgreSQL 16+](https://www.postgresql.org/download/)
-- [DBeaver](https://dbeaver.io/download/)
-- [Git](https://git-scm.com/downloads)
+### Instalando o Anaconda Python
 
----
+1. **Windows/Mac**:
 
-## 2️⃣ Clonar o Repositório
+    - Acesse o site oficial do [Anaconda](https://www.anaconda.com/products/distribution).
+    - Baixe a versão apropriada para o seu sistema operacional.
+    - Siga as instruções do instalador.
 
-Clone o projeto para o seu computador:
+2. **Linux**:
+
+    - Abra o terminal e execute os seguintes comandos:
+        ```bash
+        wget https://repo.anaconda.com/archive/Anaconda3-2023.03-Linux-x86_64.sh
+        bash Anaconda3-2023.03-Linux-x86_64.sh
+        ```
+
+3. **Verificando a instalação**:
+    - Após a instalação, verifique se o Anaconda foi instalado corretamente:
+        ```bash
+        conda --version
+        ```
+
+## Instalando e Rodando o Projeto
+
+### 1. Clonando o Repositório
+
+Primeiro, clone o repositório do backend do projeto para sua máquina:
 
 ```bash
-git clone git@github.com:doninhafac/backend_urlshortener.git
+git clone https://github.com/doninhafac/backend_urlshortener
 cd backend_urlshortener
 ```
 
----
+### 2. Criando e Ativando o Ambiente Conda
 
-## 3️⃣ Configurar o Ambiente Virtual
+Crie e ative um ambiente Conda para o projeto:
 
-1. **Criar o ambiente Conda:**
-   ```bash
-   conda create -n encurtador python=3.11.9
-   ```
+```bash
+conda create --name urlshortener python=3.9
+conda activate urlshortener
+```
 
-2. **Ativar o ambiente:**
-   ```bash
-   conda activate encurtador
-   ```
+### 3. Instalando Dependências
 
-3. **Instalar as dependências:**
-   ```bash
-   pip install Django==4.1
-   pip install psycopg2
-   pip install psycopg2-binary
-   ```
+Instale as dependências necessárias:
 
----
+```bash
+pip install -r requirements.txt
+```
 
-## 4️⃣ Configurar o Banco de Dados PostgreSQL
+### 4. Configurando o Banco de Dados
 
-1. **Acessar o PostgreSQL:**
-   ```bash
-   sudo -u postgres psql
-   ```
+Certifique-se de que o PostgreSQL está rodando e crie um banco de dados para o projeto. Você pode usar o DBeaver para gerenciar o banco de dados.
 
-2. **Criar o banco de dados e conceder privilégios:**
-   ```sql
-   CREATE DATABASE db_encurtador;
-   GRANT ALL PRIVILEGES ON DATABASE db_encurtador TO postgres;
-   \q  -- Sair do PostgreSQL
-   ```
+### 5. Aplicando Migrações
 
----
+Aplique as migrações para configurar o banco de dados:
 
-## 5️⃣ Conectar ao Banco via DBeaver (opcional)
+```bash
+python manage.py migrate
+```
 
-1. Abra o DBeaver e clique no ícone de nova conexão.
-2. Preencha os campos de conexão:
-   - **Host:** `localhost`
-   - **Porta:** `5432`
-   - **Banco de Dados:** `db_encurtador`
-   - **Usuário:** `postgres`
-   - **Senha:** (sua senha configurada no PostgreSQL)
-3. Teste a conexão e salve.
+### 6. Rodando o Servidor de Desenvolvimento
 
----
+Inicie o servidor de desenvolvimento:
 
-## 6️⃣ Aplicar Migrações e Iniciar o Projeto
+```bash
+python manage.py runserver
+```
 
-1. **Criar as migrações:**
-   ```bash
-   python manage.py makemigrations
-   ```
+O backend deve estar rodando em [http://localhost:8000](http://localhost:8000).
 
-2. **Aplicar as migrações:**
-   ```bash
-   python manage.py migrate
-   ```
+### 7. Rodando o Frontend
 
-3. **Iniciar o servidor Django:**
-   ```bash
-   python manage.py runserver
-   ```
+Clone o repositório do frontend do projeto e siga as instruções para rodar o frontend:
 
-Acesse o projeto em `http://localhost:8000/`.
+```bash
+git clone https://github.com/doninhafac/frontend_urlshortener
+cd frontend_urlshortener
+```
 
----
+Siga as instruções no README do repositório do frontend para configurar e rodar o frontend.
 
-## ✅ Pronto para o Desenvolvimento!
+## Estrutura do Projeto
 
-Agora você está pronto para desenvolver e testar o projeto `URL Shortener`! 🚀
+-   **backend/**: Contém o código do servidor backend, responsável por gerenciar as URLs encurtadas.
+-   **frontend/**: Contém o código do frontend, desenvolvido com React e Vite.
 
-Se tiver dúvidas ou problemas, consulte a documentação oficial do Django e PostgreSQL ou entre em contato com o mantenedor do projeto.
-
+Feito com ❤️ por Daniel Reis e Andressa Lopes.
